@@ -116,6 +116,7 @@ h2 {
 #menu table td {
     padding: 1rem;
     text-align: left;
+    border: 1px solid;
 }
 
 #menu table th {

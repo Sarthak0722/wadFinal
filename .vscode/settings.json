@@ -1,3 +1,4 @@
 {
-    "livePreview.defaultPreviewPath": "/ajax/registration/index.html"
+    "livePreview.defaultPreviewPath": "/ajax/registration/index.html",
+    "liveServer.settings.port": 5501
 }

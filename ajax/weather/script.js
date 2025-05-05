@@ -4,7 +4,7 @@ function getWeather() {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", "weather.json", true);
     xhr.onload = function () {
-      if (this.status === 200) {
+      //if (this.status === 200) {
         const data = JSON.parse(this.responseText);
         const cityData = data.cities.find(c => c.name === city);
   
@@ -19,7 +19,7 @@ function getWeather() {
         } else {
           resultDiv.innerHTML = "City not found in local data.";
         }
-      }
+      //}
     };
     xhr.send();
   }
