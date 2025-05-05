@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            restro
+        </title>
+        <style>
+            #menu
+            {
+                border: 1px solid;
+                padding: 10px;
+                margin:10px;
+                width:180px;
+                text-align:center;
+                float:left;
+            }
+            img{
+                width: 150px;
+                height: 150px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>menu</h1>
+        <div id="result"></div>
+
+        <script>
+            fetch("/restro")
+            .then(res=>res.json())
+            .then(data=>data.menu?.forEach(menu=>
+                {
+                    document.getElementById("result").innerHTML+=`
+                    <div id="menu">
+                        <img src=${menu.image} alt="name"><br>
+                        ${menu.name}<br>
+                        ${menu.price}<br>
+                        ${menu.type}
+                        </div>`;
+                }
+            ))
+            .catch(console.error);
+        </script>
+    </body>
+</html>

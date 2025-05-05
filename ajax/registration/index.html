@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    form { max-width: 500px; margin: auto; }
+    input, textarea { width: 100%; padding: 10px; margin: 10px 0; }
+    button { padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h2>Registration Form</h2>
+  <form id="registerForm">
+    <input type="text" id="name" placeholder="Full Name" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="tel" id="mobile" placeholder="Mobile (10 digits)" required />
+    <input type="date" id="dob" required />
+    <input type="text" id="city" placeholder="City" required />
+    <textarea id="address" placeholder="Address" required></textarea>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password (min 6 chars)" required />
+    <button type="submit">Register</button>
+  </form>
+  <p>Already have an account? <a href="login.html">Login here</a></p>
+
+  <script src="script.js"></script>
+</body>
+</html>

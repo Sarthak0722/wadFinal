@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- jQuery Mobile CSS & JS -->
+  <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+  <style>
+    .profile-pic {
+      width: 150px;
+      border-radius: 50%;
+      margin: 10px auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Home -->
+<div data-role="page" id="home">
+  <div data-role="header">
+    <h1>My Portfolio</h1>
+  </div>
+
+  <div data-role="content">
+    <img src="https://via.placeholder.com/150?text=Me" alt="Profile Picture" class="profile-pic">
+    <p>Welcome to my mobile portfolio!</p>
+    <div data-role="navbar">
+      <ul>
+        <li><a href="#about" data-icon="user">About</a></li>
+        <li><a href="#projects" data-icon="grid">Projects</a></li>
+        <li><a href="#skills" data-icon="star">Skills</a></li>
+        <li><a href="#contact" data-icon="mail">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div data-role="footer" data-position="fixed">
+    <h4>&copy; 2025 Your Name</h4>
+  </div>
+</div>
+
+<!-- About Me -->
+<div data-role="page" id="about">
+  <div data-role="header">
+    <h1>About Me</h1>
+    <a href="#home" data-icon="back" data-rel="back">Back</a>
+  </div>
+  <div data-role="content">
+    <p>Hello! I'm a passionate student and aspiring developer based in Pune.</p>
+    <p>I love building web apps, mobile-friendly sites, and learning new technologies.</p>
+  </div>
+</div>
+
+<!-- Projects -->
+<div data-role="page" id="projects">
+  <div data-role="header">
+    <h1>Projects</h1>
+    <a href="#home" data-icon="back" data-rel="back">Back</a>
+  </div>
+  <div data-role="content">
+    <ul data-role="listview" data-inset="true">
+      <li>
+        <h2>Smart Grocery App</h2>
+        <p>A recommendation engine for grocery inventory.</p>
+      </li>
+      <li>
+        <h2>Movie Review Site</h2>
+        <p>Mobile-friendly movie rating site using jQuery Mobile.</p>
+      </li>
+      <li>
+        <h2>College Clubs Portal</h2>
+        <p>Displays student clubs with achievements and images.</p>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Skills -->
+<div data-role="page" id="skills">
+  <div data-role="header">
+    <h1>Skills</h1>
+    <a href="#home" data-icon="back" data-rel="back">Back</a>
+  </div>
+  <div data-role="content">
+    <div data-role="collapsible-set">
+      <div data-role="collapsible" data-collapsed="false">
+        <h3>Web Development</h3>
+        <p>HTML, CSS, JavaScript, jQuery, React</p>
+      </div>
+      <div data-role="collapsible">
+        <h3>Data Science</h3>
+        <p>Python, Pandas, Scikit-learn</p>
+      </div>
+      <div data-role="collapsible">
+        <h3>Tools</h3>
+        <p>Git, VS Code, Power BI</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contact Info -->
+<div data-role="page" id="contact">
+  <div data-role="header">
+    <h1>Contact Me</h1>
+    <a href="#home" data-icon="back" data-rel="back">Back</a>
+  </div>
+  <div data-role="content">
+    <p>Email: yourname@email.com</p>
+    <p>Phone: +91-9876543210</p>
+    <p>LinkedIn: <a href="#">linkedin.com/in/yourname</a></p>
+  </div>
+</div>
+
+</body>
+</html>

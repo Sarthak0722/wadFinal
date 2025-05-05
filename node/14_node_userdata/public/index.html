@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User List</title>
+  <style>
+  </style>
+</head>
+<body>
+  <h2>Users</h2>
+  <ul id="userList"></ul>
+
+  
+  <script>
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(data => data.users?.forEach(user => {
+        document.getElementById('userList').innerHTML += `<li>${user.name} - ${user.email}</li>`;
+      }))
+      .catch(console.error);
+  </script>
+</body>
+</html>

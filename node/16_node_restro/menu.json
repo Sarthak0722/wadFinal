@@ -1,0 +1,14 @@
+{
+    "menu":[
+        {"name":"paneer butter",
+          "price":"250",
+           "image":"images/paneer.png",
+            "type":"main course"
+        },
+        {"name":"machurian",
+          "price":"250",
+           "image":"images/man.png",
+            "type":"starter"
+        }
+    ]
+}

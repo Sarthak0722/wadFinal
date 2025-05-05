@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>Product Catalog</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      text-align: left;
+      padding: 10px;
+    }
+
+    img {
+      width: 100px;
+      height: auto;
+    }
+    .pagination {
+      text-align: center;
+    }
+    .pagination button {
+      margin: 0 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .pagination .active {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Product Catalog</h2>
+  <table id="productTable">
+    <thead>
+      <tr>
+        <th>Product Image</th>
+        <th>Product Name</th>
+        <th>Price (INR ₹)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="pagination">
+    <button onclick="prevPage()">⬅ Previous</button>
+    <span id="pageInfo">Page 1</span>
+    <button onclick="nextPage()">Next ➡</button>
+  </div>
+
+  <script>
+    const products = [
+      { name: "Wireless Headphones", price: "₹7,999", description: "Noise-cancelling over-ear headphones.", image: "laptop.jpg" },
+      { name: "Smartwatch", price: "₹12,999", description: "Fitness tracking smartwatch.", image: "https://via.placeholder.com/60?text=2" },
+      { name: "Gaming Mouse", price: "₹2,499", description: "Ergonomic gaming mouse.", image: "https://via.placeholder.com/60?text=3" },
+      { name: "Laptop Stand", price: "₹1,999", description: "Adjustable aluminium stand.", image: "https://via.placeholder.com/60?text=4" },
+      { name: "Bluetooth ", price: "₹3,499", description: "Portable Bluetooth speaker.", image: "https://via.placeholder.com/60?text=5" },
+      { name: "Keyboard", price: "₹1,299", description: "Mechanical keyboard.", image: "https://via.placeholder.com/60?text=6" },
+      { name: "Webcam", price: "₹2,999", description: "HD webcam for video calls.", image: "https://via.placeholder.com/60?text=7" },
+      { name: "Monitor", price: "₹15,999", description: "24-inch LED monitor.", image: "https://via.placeholder.com/60?text=8" },
+      { name: "Pen Drive", price: "₹799", description: "64GB USB 3.0 pen drive.", image: "https://via.placeholder.com/60?text=9" },
+      { name: "Hard Drive", price: "₹5,499", description: "1TB external hard drive.", image: "https://via.placeholder.com/60?text=10" },
+      { name: "Tablet", price: "₹18,499", description: "10-inch Android tablet.", image: "https://via.placeholder.com/60?text=11" },
+      { name: "Charger", price: "₹999", description: "Fast charging USB-C charger.", image: "https://via.placeholder.com/60?text=12" }
+    ];
+
+    const rowsPerPage = 10;
+    let currentPage = 1;
+
+    function renderTable() {
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const paginatedItems = products.slice(start, end);
+
+      const tbody = document.querySelector("#productTable tbody");
+      tbody.innerHTML = "";
+
+      paginatedItems.forEach(product => {
+        const row = `<tr>
+          <td><img src="${product.image}" alt="${product.name}"/></td>
+          <td>${product.name}</td>
+          <td>${product.price}</td>
+          <td>${product.description}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+
+      document.getElementById("pageInfo").innerText = `Page ${currentPage} of ${Math.ceil(products.length / rowsPerPage)}`;
+    }
+
+    function nextPage() {
+      if (currentPage * rowsPerPage < products.length) {
+        currentPage++;
+        renderTable();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    }
+
+    renderTable();
+  </script>
+
+</body>
+</html>

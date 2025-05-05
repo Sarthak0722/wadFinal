@@ -1,0 +1,9 @@
+<!-- login.component.html -->
+ 
+<h2>Login</h2>
+<form (ngSubmit)="login()">
+  <input [(ngModel)]="credentials.username" name="username" placeholder="Username" required />
+  <input [(ngModel)]="credentials.password" name="password" placeholder="Password" type="password" required />
+  <button type="submit">Login</button>
+</form>
+<p>Don't have an account? <a routerLink = '/register'>Register</a></p>

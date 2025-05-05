@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            catelog
+        </title>
+        <style>
+            .product {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+      width: 180px;
+      text-align: center;
+      float: left;
+    }
+    img {
+      width: 150px;
+      height: 150px;
+    }
+        </style>
+    </head>
+    <body>
+        <h1>product catelog</h1>
+        <div id="catelog"></div>
+        
+        <script>
+            fetch("/api/products")
+            .then(res=>res.json())
+            .then(data=>data.products?.forEach(products=>
+                {
+                    document.getElementById("catelog").innerHTML+=`
+                    <div class=product><img src=${products.image} alt="hello"><br>
+                    ${products.name}<br>
+                    ${products.price}</div>`;
+                }
+            ))
+            .catch(console.error);
+        </script>
+    </body>
+</html>

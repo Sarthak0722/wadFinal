@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration Form</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Event Registration Form -->
+    <div class="container mt-5">
+        <div class="form-container">
+            <h3 class="text-center mb-4">Event Registration</h3>
+            <form id="eventForm">
+                <!-- Name Input with Floating Label -->
+                <div class="mb-3 form-floating">
+                    <input type="text" class="form-control" id="fullName" placeholder="Full Name" required>
+                    <label for="fullName">Full Name</label>
+                    <div class="invalid-feedback">
+                        Please enter your full name.
+                    </div>
+                </div>
+
+                <!-- Email Input with Validation and Tooltip -->
+                <div class="mb-3 form-floating">
+                    <input type="email" class="form-control" id="email" placeholder="Email" required>
+                    <label for="email">Email Address</label>
+                    <div class="invalid-feedback">
+                        Please provide a valid email address.
+                    </div>
+                    <div class="form-text" data-bs-toggle="tooltip" data-bs-placement="right" title="We'll never share your email.">
+                        <i class="bi bi-info-circle"></i> Enter a valid email address.
+                    </div>
+                </div>
+
+                <!-- Phone Number Input with Floating Label -->
+                <div class="mb-3 form-floating">
+                    <input type="tel" class="form-control" id="phone" placeholder="Phone Number" required pattern="^\+?[1-9]\d{1,14}$">
+                    <label for="phone">Phone Number</label>
+                    <div class="invalid-feedback">
+                        Please enter a valid phone number.
+                    </div>
+                </div>
+
+                <!-- Date of Birth with Floating Label -->
+                <div class="mb-3 form-floating">
+                    <input type="date" class="form-control" id="dob" required>
+                    <label for="dob">Date of Birth</label>
+                    <div class="invalid-feedback">
+                        Please select your date of birth.
+                    </div>
+                </div>
+
+                <!-- Event Type Dropdown with Floating Label -->
+                <div class="mb-3 form-floating">
+                    <select class="form-select" id="eventType" required>
+                        <option value="" disabled selected>Select an Event</option>
+                        <option value="conference">Conference</option>
+                        <option value="workshop">Workshop</option>
+                        <option value="seminar">Seminar</option>
+                    </select>
+                    <label for="eventType">Event Type</label>
+                    <div class="invalid-feedback">
+                        Please select an event type.
+                    </div>
+                </div>
+
+                <!-- Checkbox for Terms and Conditions -->
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                    <label class="form-check-label" for="termsCheck">I agree to the terms and conditions</label>
+                    <div class="invalid-feedback">
+                        You must agree to the terms and conditions to proceed.
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary w-100">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+
+    <script>
+        // Enable Tooltips
+        var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+        // Form validation
+        const form = document.getElementById('eventForm');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Validate all form fields
+            if (form.checkValidity() === false) {
+                event.stopPropagation();
+            } else {
+                alert('Registration successful!');
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    </script>
+
+</body>
+
+</html>

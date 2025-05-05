@@ -1,0 +1,22 @@
+{
+    "cities": [
+      {
+        "name": "mumbai",
+        "temperature": "32°C",
+        "humidity": "78%",
+        "condition": "Sunny"
+      },
+      {
+        "name": "delhi",
+        "temperature": "28°C",
+        "humidity": "65%",
+        "condition": "Cloudy"
+      },
+      {
+        "name": "pune",
+        "temperature": "26°C",
+        "humidity": "70%",
+        "condition": "Rainy"
+      }
+    ]
+  }

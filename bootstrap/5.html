@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple E-Commerce</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .product-card:hover { transform: scale(1.05); transition: 0.3s; }
+  </style>
+</head>
+<body>
+
+<div class="container mt-4">
+  <!-- Filter Dropdown -->
+  <div class="mb-3">
+    <h5>Filter by Category</h5>
+    <div class="dropdown">
+      <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+        Select Category
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#" data-category="all">All</a></li>
+        <li><a class="dropdown-item" href="#" data-category="electronics">Electronics</a></li>
+        <li><a class="dropdown-item" href="#" data-category="clothing">Clothing</a></li>
+        <li><a class="dropdown-item" href="#" data-category="books">Books</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Product Cards -->
+  <div class="row" id="product-list">
+    <div class="col-md-4 mb-4 product-card electronics">
+      <div class="card">
+        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product">
+        <div class="card-body">
+          <h5 class="card-title">Smartphone</h5>
+          <p>$500 - Electronics</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4 product-card clothing">
+      <div class="card">
+        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product">
+        <div class="card-body">
+          <h5 class="card-title">T-Shirt</h5>
+          <p>$25 - Clothing</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4 product-card books">
+      <div class="card">
+        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product">
+        <div class="card-body">
+          <h5 class="card-title">Book</h5>
+          <p>$15 - Books</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const items = document.querySelectorAll('.dropdown-item');
+  const products = document.querySelectorAll('.product-card');
+
+  items.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      const category = item.getAttribute('data-category');
+      products.forEach(product => {
+        if (category === 'all' || product.classList.contains(category)) {
+          product.style.display = 'block';
+        } else {
+          product.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

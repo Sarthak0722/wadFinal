@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Dashboard</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; border: 1px solid #ccc; }
+    #logoutBtn { margin-top: 20px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h2>Welcome, <span id="welcomeUser"></span>!</h2>
+  <button id="logoutBtn">Logout</button>
+
+  <h3>Your Details:</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th><th>Email</th><th>Mobile</th><th>DOB</th><th>City</th><th>Address</th>
+      </tr>
+    </thead>
+    <tbody id="userTableBody"></tbody>
+  </table>
+
+  <script src="script.js"></script>
+</body>
+</html>

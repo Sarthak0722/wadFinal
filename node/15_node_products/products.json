@@ -1,0 +1,10 @@
+{
+    "products":[
+        {"name":"laptop",
+    "image":"images/laptop.jpg",
+"price":"15000"},
+{"name":"mouse",
+    "image":"images/laptop.jpg",
+"price":"3000"}
+    ]
+}
