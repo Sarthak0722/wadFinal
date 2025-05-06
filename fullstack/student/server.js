@@ -1,101 +1,92 @@
-// server.js
 const express = require('express');
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 const app = express();
-const port = 3000;
-app.use(express.json());
+
+// Middleware
 app.use(express.static('public'));
 
-const url = 'mongodb://127.0.0.1:27017';
-const client = new MongoClient(url);
-const dbName = 'student';
+// Connect to MongoDB
+mongoose.connect('mongodb://127.0.0.1:27017/student');
 
-let collection;
-
-client.connect().then(() => {
-    const db = client.db(dbName);
-    collection = db.collection('studentmarks');
-    console.log("Connected to MongoDB");
-}).catch(err => console.error(err));
-
-// c) Insert documents
-app.get('/insert', async (req, res) => {
-    const data = [
-        { Name: 'Alice', Roll_No: 1, WAD_Marks: 26, CC_Marks: 30, DSBDA_Marks: 28, CNS_Marks: 25, AI_Marks: 29 },
-        { Name: 'Bob', Roll_No: 2, WAD_Marks: 22, CC_Marks: 21, DSBDA_Marks: 18, CNS_Marks: 20, AI_Marks: 24 },
-        { Name: 'Charlie', Roll_No: 3, WAD_Marks: 27, CC_Marks: 26, DSBDA_Marks: 30, CNS_Marks: 28, AI_Marks: 26 },
-        { Name: 'David', Roll_No: 4, WAD_Marks: 15, CC_Marks: 18, DSBDA_Marks: 19, CNS_Marks: 17, AI_Marks: 20 },
-        { Name: 'Eve', Roll_No: 5, WAD_Marks: 29, CC_Marks: 28, DSBDA_Marks: 27, CNS_Marks: 26, AI_Marks: 30 }
-    ];
-    await collection.insertMany(data);
-    res.send('Data inserted!');
+// Schema & Model
+const studentSchema = new mongoose.Schema({
+  Name: String,
+  Roll_No: Number,
+  WAD_Marks: Number,
+  CC_Marks: Number,
+  DSBDA_Marks: Number,
+  CNS_Marks: Number,
+  AI_Marks: Number,
 });
 
-// d) Count & list all documents
-app.get('/all', async (req, res) => {
-    const allDocs = await collection.find().toArray();
-    const count = await collection.countDocuments();
-    res.json({ count, allDocs });
+const Student = mongoose.model('StudentMarks', studentSchema);
+
+// (c) Insert sample data
+app.get('/init', async (req, res) => {
+  await Student.insertMany([
+    { Name: 'ABC', Roll_No: 111, WAD_Marks: 25, CC_Marks: 25, DSBDA_Marks: 25, CNS_Marks: 25, AI_Marks: 25 },
+    { Name: 'XYZ', Roll_No: 112, WAD_Marks: 10, CC_Marks: 15, DSBDA_Marks: 30, CNS_Marks: 35, AI_Marks: 28 },
+    { Name: 'PQR', Roll_No: 113, WAD_Marks: 27, CC_Marks: 26, DSBDA_Marks: 29, CNS_Marks: 25, AI_Marks: 26 },
+    { Name: 'LMN', Roll_No: 114, WAD_Marks: 15, CC_Marks: 22, DSBDA_Marks: 19, CNS_Marks: 18, AI_Marks: 17 },
+  ]);
+  res.send('Inserted sample students');
 });
 
-// e) Students with DSBDA marks > 20
-app.get('/dsbda20', async (req, res) => {
-    const result = await collection.find({ DSBDA_Marks: { $gt: 20 } }, { projection: { Name: 1, _id: 0 } }).toArray();
-    res.json(result);
+// (d + j) List all with count
+app.get('/students', async (req, res) => {
+  const students = await Student.find();
+  const count = await Student.countDocuments();
+  res.json({ count, students });
 });
 
-// f) Update marks of a student (increase all by 10)
-app.put('/update/:name', async (req, res) => {
-    const name = req.params.name;
-    await collection.updateOne({ Name: name }, {
-        $inc: {
-            WAD_Marks: 10, CC_Marks: 10,
-            DSBDA_Marks: 10, CNS_Marks: 10,
-            AI_Marks: 10
-        }
-    });
-    res.send("Marks updated");
+// (e) List students with >20 in DSBDA
+app.get('/students/dsbda/above20', async (req, res) => {
+  const students = await Student.find({ DSBDA_Marks: { $gt: 20 } });
+  res.json(students);
 });
 
-// g) Students with > 25 in all subjects
-app.get('/all25', async (req, res) => {
-    const result = await collection.find({
-        WAD_Marks: { $gt: 25 },
-        CC_Marks: { $gt: 25 },
-        DSBDA_Marks: { $gt: 25 },
-        CNS_Marks: { $gt: 25 },
-        AI_Marks: { $gt: 25 }
-    }).project({ Name: 1, _id: 0 }).toArray();
-    res.json(result);
+// (f) Update marks of a student by name (adds +10 to all subjects)
+app.put('/students/update/:name', async (req, res) => {
+  const student = await Student.findOne({ Name: req.params.name });
+  if (student) {
+    student.WAD_Marks += 10;
+    student.CC_Marks += 10;
+    student.DSBDA_Marks += 10;
+    student.CNS_Marks += 10;
+    student.AI_Marks += 10;
+    await student.save();
+    res.json({ message: 'Marks updated', student });
+  } else {
+    res.status(404).json({ message: 'Student not found' });
+  }
 });
 
-// h) Students with < 40 in both Maths and Science (assume WAD and CNS)
-app.get('/lowmathscience', async (req, res) => {
-    const result = await collection.find({
-        WAD_Marks: { $lt: 40 },
-        CNS_Marks: { $lt: 40 }
-    }).project({ Name: 1, _id: 0 }).toArray();
-    res.json(result);
+// (g) Students with >25 in all subjects
+app.get('/students/allabove25', async (req, res) => {
+  const students = await Student.find({
+    WAD_Marks: { $gt: 25 },
+    CC_Marks: { $gt: 25 },
+    DSBDA_Marks: { $gt: 25 },
+    CNS_Marks: { $gt: 25 },
+    AI_Marks: { $gt: 25 },
+  });
+  res.json(students);
 });
 
-// i) Remove specified student
-app.delete('/remove/:name', async (req, res) => {
-    const name = req.params.name;
-    await collection.deleteOne({ Name: name });
-    res.send("Student removed");
+// (h) Students with <40 in both WAD & CNS
+app.get('/students/below40mathsci', async (req, res) => {
+  const students = await Student.find({
+    WAD_Marks: { $lt: 40 },
+    CNS_Marks: { $lt: 40 },
+  });
+  res.json(students);
 });
 
-// j) Display all in browser table
-app.get('/display', async (req, res) => {
-    const students = await collection.find().toArray();
-    let table = `<table border='1'><tr><th>Name</th><th>Roll No</th><th>WAD</th><th>CC</th><th>DSBDA</th><th>CNS</th><th>AI</th></tr>`;
-    students.forEach(s => {
-        table += `<tr><td>${s.Name}</td><td>${s.Roll_No}</td><td>${s.WAD_Marks}</td><td>${s.CC_Marks}</td><td>${s.DSBDA_Marks}</td><td>${s.CNS_Marks}</td><td>${s.AI_Marks}</td></tr>`;
-    });
-    table += '</table>';
-    res.send(table);
+// (i) Delete student by name
+app.delete('/students/:name', async (req, res) => {
+  const result = await Student.deleteOne({ Name: req.params.name });
+  res.json({ message: 'Student deleted if found', result });
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+// Server
+app.listen(3000, () => console.log('Server running at http://localhost:3000'));

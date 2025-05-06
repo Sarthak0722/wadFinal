@@ -1,52 +1,60 @@
-// server.js
 const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 const app = express();
-const port = 3000;
 
+// Middleware to parse JSON
 app.use(express.json());
 
-// MongoDB Connection
-const url = 'mongodb://127.0.0.1:27017';
-const client = new MongoClient(url);
-const dbName = 'online_bookstore';
+// Connect to MongoDB
+mongoose.connect('mongodb://127.0.0.1:27017/bookstore');
 
-let booksCollection;
-
-client.connect().then(() => {
-  const db = client.db(dbName);
-  booksCollection = db.collection('books');
-  console.log('✅ Connected to MongoDB');
-}).catch(err => console.error('❌ MongoDB Connection Failed:', err));
-
-/* ➕ Add a New Book */
-app.post('/books', async (req, res) => {
-  const { title, author, price, genre } = req.body;
-  await booksCollection.insertOne({ title, author, price, genre });
-  res.send('✅ Book added successfully');
+// Schema & Model
+const bookSchema = new mongoose.Schema({
+  title: String,
+  author: String,
+  price: Number,
+  genre: String
 });
 
-/* 📚 Get All Books */
+const Book = mongoose.model('Book', bookSchema);
+
+// 📌 Add 5 books using GET (for your requirement)
+app.get('/init-books', async (req, res) => {
+  await Book.insertMany([
+    { title: 'The Alchemist', author: 'Paulo Coelho', price: 299, genre: 'Fiction' },
+    { title: 'Atomic Habits', author: 'James Clear', price: 499, genre: 'Self-help' },
+    { title: 'Rich Dad Poor Dad', author: 'Robert Kiyosaki', price: 399, genre: 'Finance' },
+    { title: 'Clean Code', author: 'Robert C. Martin', price: 799, genre: 'Programming' },
+    { title: 'The Subtle Art of Not Giving a F*ck', author: 'Mark Manson', price: 350, genre: 'Self-help' },
+  ]);
+  res.send('Inserted 5 sample books');
+});
+
+// 📌 Retrieve all books
 app.get('/books', async (req, res) => {
-  const books = await booksCollection.find().toArray();
-  res.json(books);
+  const books = await Book.find();
+  res.json({ count: books.length, books });
 });
 
-/* ✏️ Update Book by ID */
-app.put('/books/:id', async (req, res) => {
-  const id = req.params.id;
-  const updatedData = req.body;
-  await booksCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedData });
-  res.send('✅ Book updated successfully');
+// 📌 Update a book by ID
+app.put('/books/update/:id', async (req, res) => {
+  const updated = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  if (updated) {
+    res.json({ message: 'Book updated', updated });
+  } else {
+    res.status(404).json({ message: 'Book not found' });
+  }
 });
 
-/* ❌ Delete Book by ID */
+// 📌 Delete a book by ID
 app.delete('/books/:id', async (req, res) => {
-  const id = req.params.id;
-  await booksCollection.deleteOne({ _id: new ObjectId(id) });
-  res.send('🗑️ Book deleted successfully');
+  const deleted = await Book.findByIdAndDelete(req.params.id);
+  if (deleted) {
+    res.json({ message: 'Book deleted', deleted });
+  } else {
+    res.status(404).json({ message: 'Book not found' });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`🚀 Server is running at http://localhost:${port}`);
-});
+// Start server
+app.listen(3000, () => console.log('Server running at http://localhost:3000'));

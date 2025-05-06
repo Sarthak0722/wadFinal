@@ -1,52 +1,55 @@
-// server.js
 const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 const app = express();
-const port = 3000;
 
+// Middleware to parse JSON
 app.use(express.json());
 
-const url = 'mongodb://127.0.0.1:27017';
-const client = new MongoClient(url);
-const dbName = 'company';
+// Connect to MongoDB
+mongoose.connect('mongodb://127.0.0.1:27017/employees');
 
-let employeeCollection;
-
-client.connect().then(() => {
-    const db = client.db(dbName);
-    employeeCollection = db.collection('employees');
-    console.log('Connected to MongoDB');
-}).catch(err => console.error(err));
-
-/* ➕ Add New Employee */
-app.post('/employee', async (req, res) => {
-    const { name, department, designation, salary, joiningDate } = req.body;
-    const employee = { name, department, designation, salary, joiningDate };
-    await employeeCollection.insertOne(employee);
-    res.send('Employee added successfully');
+// Schema & Model
+const employeeSchema = new mongoose.Schema({
+  name: String,
+  department: String,
+  designation: String,
+  salary: Number,
+  joiningDate: Date
 });
 
-/* 📄 View All Employees */
+const Employee = mongoose.model('Employee', employeeSchema);
+
+// 📌 Add a new employee
+app.post('/employees', async (req, res) => {
+  const employee = await Employee.create(req.body);
+  res.json({ message: 'Employee added', employee });
+});
+
+// 📌 View all employee records
 app.get('/employees', async (req, res) => {
-    const employees = await employeeCollection.find().toArray();
-    res.json(employees);
+  const employees = await Employee.find();
+  res.json({ count: employees.length, employees });
 });
 
-/* ✏️ Update Employee by ID */
-app.put('/employee/:id', async (req, res) => {
-    const id = req.params.id;
-    const updateData = req.body;
-    await employeeCollection.updateOne({ _id: new ObjectId(id) }, { $set: updateData });
-    res.send('Employee updated successfully');
+// 📌 Update an existing employee’s details by ID
+app.put('/employees/:id', async (req, res) => {
+  const updated = await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  if (updated) {
+    res.json({ message: 'Employee updated', updated });
+  } else {
+    res.status(404).json({ message: 'Employee not found' });
+  }
 });
 
-/* ❌ Delete Employee by ID */
-app.delete('/employee/:id', async (req, res) => {
-    const id = req.params.id;
-    await employeeCollection.deleteOne({ _id: new ObjectId(id) });
-    res.send('Employee deleted successfully');
+// 📌 Delete an employee by ID
+app.delete('/employees/:id', async (req, res) => {
+  const result = await Employee.findByIdAndDelete(req.params.id);
+  if (result) {
+    res.json({ message: 'Employee deleted', result });
+  } else {
+    res.status(404).json({ message: 'Employee not found' });
+  }
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+// Start server
+app.listen(3000, () => console.log('Server running at http://localhost:3000'));
